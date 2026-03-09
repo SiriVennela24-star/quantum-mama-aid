@@ -136,3 +136,131 @@ Watch the demo video and learn more about the project on Devpost.
 <p align="center">
 <b>"QuantumMom – Intelligent technology protecting every mother and every heartbeat."</b>
 </p>
+
+
+
+<h1 align="center">QuantumMom</h1>
+<h3 align="center">Plataforma Inteligente de Emergencia para Mujeres Embarazadas</h3>
+
+<p align="center">
+Una plataforma de salud materna que utiliza aprendizaje automático, análisis geoespacial y optimización inspirada en la computación cuántica para apoyar a mujeres embarazadas.
+</p>
+
+<hr>
+
+<h2>Descripción del Proyecto</h2>
+
+<p>
+<b>QuantumMom</b> es una aplicación web de salud materna diseñada para apoyar a mujeres embarazadas durante todo su proceso de embarazo. 
+La plataforma ofrece información sobre la salud, predicción de riesgos durante el embarazo y un sistema de emergencia que guía a la usuaria hacia el hospital más adecuado cercano.
+</p>
+
+<p>
+Durante situaciones críticas, la usuaria puede activar el <b>Modo de Emergencia</b>, que envía alertas a contactos de emergencia y proporciona navegación optimizada hacia el hospital más adecuado.
+</p>
+
+<hr>
+
+<h2>Problema</h2>
+
+<p>
+El acceso a la atención médica materna sigue siendo un desafío importante en muchas regiones. 
+Muchas mujeres embarazadas experimentan retrasos para llegar a hospitales durante emergencias debido a la falta de información, sistemas de respuesta lentos y dificultad para identificar el hospital adecuado.
+</p>
+
+<p>
+La mayoría de las aplicaciones de embarazo solo ofrecen recordatorios o información educativa, pero no proporcionan asistencia de emergencia en tiempo real.
+</p>
+
+<hr>
+
+<h2>Nuestra Solución</h2>
+
+<p>
+QuantumMom combina tecnología y análisis inteligente para ofrecer:
+</p>
+
+<ul>
+<li>Monitoreo de salud durante el embarazo</li>
+<li>Predicción de riesgos usando aprendizaje automático</li>
+<li>Alertas automáticas a contactos de emergencia</li>
+<li>Recomendación del hospital más adecuado</li>
+<li>Navegación hacia el hospital más cercano</li>
+</ul>
+
+<p>
+Esto permite tomar decisiones más rápidas e informadas durante emergencias maternas.
+</p>
+
+<hr>
+
+<h2>Características Principales</h2>
+
+<ul>
+<li><b>Registro de Paciente</b> – Recopila datos de salud como edad, presión arterial, peso y etapa del embarazo.</li>
+<li><b>Panel de Salud</b> – Muestra información sobre el desarrollo del bebé y recomendaciones nutricionales.</li>
+<li><b>Predicción de Riesgo</b> – Analiza parámetros de salud para estimar el nivel de riesgo durante el embarazo.</li>
+<li><b>Modo de Emergencia</b> – Activación rápida con temporizador de contracciones y alertas automáticas.</li>
+<li><b>Optimización de Hospitales</b> – Selecciona el hospital más adecuado cercano.</li>
+<li><b>Navegación</b> – Guía al usuario hacia el hospital seleccionado.</li>
+</ul>
+
+<hr>
+
+<h2>Tecnologías Utilizadas</h2>
+
+<ul>
+<li><b>Frontend:</b> React + TypeScript</li>
+<li><b>Herramienta de Construcción:</b> Vite</li>
+<li><b>Estilos:</b> Tailwind CSS + shadcn/ui</li>
+<li><b>Animaciones:</b> Framer Motion</li>
+<li><b>Enrutamiento:</b> React Router</li>
+<li><b>Mapas:</b> OpenStreetMap y Google Maps</li>
+<li><b>Testing:</b> Vitest</li>
+</ul>
+
+<hr>
+
+<h2>Algoritmos Utilizados</h2>
+
+<ul>
+<li><b>K-Nearest Neighbors (KNN)</b> – Predicción del riesgo durante el embarazo.</li>
+<li><b>Fórmula de Haversine</b> – Cálculo de la distancia geográfica entre la usuaria y hospitales cercanos.</li>
+<li><b>QAOA (Quantum Approximate Optimization Algorithm)</b> – Optimización y clasificación de hospitales.</li>
+</ul>
+
+<hr>
+
+<h2>Impacto</h2>
+
+<p>
+QuantumMom busca mejorar el acceso a la atención médica materna proporcionando apoyo inteligente durante emergencias. 
+Al combinar análisis predictivo y navegación optimizada, la plataforma ayuda a reducir retrasos en la atención médica y mejorar la seguridad de madres y bebés.
+</p>
+
+<hr>
+
+<h2>Mejoras Futuras</h2>
+
+<ul>
+<li>Integración con dispositivos de monitoreo de salud (wearables)</li>
+<li>Asistente de inteligencia artificial para orientación durante el embarazo</li>
+<li>Soporte multilingüe y comandos de voz</li>
+<li>Integración directa con hospitales y servicios de emergencia</li>
+</ul>
+
+<hr>
+
+<h2>Hackathon</h2>
+
+<p>
+Este proyecto fue desarrollado durante el <b>She Ships Hackathon</b>, enfocado en utilizar tecnología para abordar desafíos relacionados con la equidad de género y la salud materna.
+</p>
+
+<hr>
+
+<h2 align="center">Lema</h2>
+
+<p align="center">
+<b>"QuantumMom — Tecnología inteligente protegiendo a cada madre y cada latido."</b>
+</p>
