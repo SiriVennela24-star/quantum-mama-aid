@@ -97,30 +97,45 @@ const Emergency = () => {
     : "#";
   const deliveryWindow = profile ? predictDeliveryWindow(profile) : "";
 
+  // Short message for mailto/sms (URL length safe)
+  const buildShortMessage = () => {
+    if (!profile || !bestHospital) return "";
+    return `EMERGENCY: ${profile.name} may be in labour!\n\nLocation: ${locationLink}\nHospital: ${bestHospital.hospital.name} (${bestHospital.distance.toFixed(1)} km, ~${travelTime} min)\nDirections: ${directionsLink}\nDelivery Window: ${deliveryWindow}\n\nPlease help immediately! - QuantumMom`;
+  };
+
+  // Full message for display/webhook
   const buildAlertMessage = () => {
     if (!profile || !bestHospital) return "";
     return `🚨 QUANTUMMOM EMERGENCY ALERT 🚨\n\n${profile.name} may be experiencing labour pain and has activated the QuantumMom emergency system.\n\n📍 Live Location:\n${locationLink}\n\n🗺️ Navigate to Hospital:\n${directionsLink}\n\n🏥 Nearest Hospital (QAOA Optimized):\n${bestHospital.hospital.name}\n\n📏 Distance: ${bestHospital.distance.toFixed(1)} km\n⏱️ Estimated Arrival: ${travelTime} minutes\n\n🍼 Estimated Delivery Window:\n${deliveryWindow}\n\n👶 Pregnancy Month: ${profile.pregnancyMonth}/9\n${timerStarted ? `\n⏲️ Contraction Timer: ${formatTimer(timerSeconds)}\n` : ""}\nPlease assist immediately. This is an automated emergency alert from QuantumMom.`;
   };
 
   const alertMessage = buildAlertMessage();
+  const shortMessage = buildShortMessage();
 
   const sendEmailAlert = (email: string, contactName: string) => {
-    const subject = encodeURIComponent("🚨 QuantumMom Emergency Alert");
-    const body = encodeURIComponent(alertMessage);
-    window.open(`mailto:${encodeURIComponent(email)}?subject=${subject}&body=${body}`, "_blank");
+    const subject = encodeURIComponent("EMERGENCY - QuantumMom Alert for " + (profile?.name || "Patient"));
+    const body = encodeURIComponent(shortMessage);
+    const link = document.createElement("a");
+    link.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    link.click();
     setEmailsSent((prev) => [...prev, email]);
   };
 
   const sendSMSAlert = (phone: string) => {
-    const message = encodeURIComponent(alertMessage);
-    window.open(`sms:${encodeURIComponent(phone)}?body=${message}`, "_blank");
+    const body = encodeURIComponent(shortMessage);
+    const link = document.createElement("a");
+    link.href = `sms:${phone}?body=${body}`;
+    link.click();
     setSmsSent((prev) => [...prev, phone]);
   };
 
   const sendToAllContacts = () => {
     if (!profile) return;
-    profile.emergencyContacts.forEach((c) => {
-      if (c.email) sendEmailAlert(c.email, c.name);
+    // Send emails one by one with small delays to avoid browser blocking
+    profile.emergencyContacts.forEach((c, i) => {
+      if (c.email) {
+        setTimeout(() => sendEmailAlert(c.email, c.name), i * 500);
+      }
     });
   };
 
