@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Heart, Baby, Utensils, Phone, Plus, Trash2 } from "lucide-react";
+import QuantumMomHeader from "@/components/QuantumMomHeader";
 
 const Registration = () => {
   const navigate = useNavigate();
@@ -52,15 +53,7 @@ const Registration = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="gradient-hero px-6 py-10 text-center">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="font-display text-4xl font-extrabold tracking-tight text-primary-foreground">
-            🤰 QuantumMom
-          </h1>
-          <p className="mt-2 text-primary-foreground/80 text-lg">AI + Quantum-Assisted Pregnancy Monitoring</p>
-        </motion.div>
-      </div>
+      <QuantumMomHeader subtitle="AI + Quantum-Assisted Pregnancy Monitoring" />
 
       {/* Step indicator */}
       <div className="flex justify-center gap-2 py-6">
