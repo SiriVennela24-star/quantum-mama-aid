@@ -5,8 +5,8 @@ import { loadProfile } from "@/lib/store";
 import { UserProfile } from "@/lib/types";
 import { predictRisk, getNutritionRecommendations, getBabyDevelopment, predictDeliveryWindow } from "@/lib/riskPrediction";
 import { peruHospitals } from "@/lib/hospitals";
-import { findNearbyHospitals } from "@/lib/qaoa";
-import { Heart, Baby, Activity, AlertTriangle, Apple, Clock, MapPin, Phone, Siren } from "lucide-react";
+import { findNearbyHospitals, qaoaOptimize, estimateTravelTime } from "@/lib/qaoa";
+import { Heart, Baby, Activity, AlertTriangle, Apple, Clock, MapPin, Phone, Siren, Navigation, Zap } from "lucide-react";
 import QuantumMomHeader from "@/components/QuantumMomHeader";
 
 const Dashboard = () => {
@@ -31,9 +31,16 @@ const Dashboard = () => {
   const baby = getBabyDevelopment(profile.pregnancyMonth);
   const deliveryWindow = predictDeliveryWindow(profile);
 
-  // Find nearest hospital (default Lima coords)
-  const nearby = findNearbyHospitals(-12.046, -77.043, peruHospitals, 50);
+  // QAOA optimized hospital route
+  const userLat = -12.046;
+  const userLon = -77.043;
+  const nearby = findNearbyHospitals(userLat, userLon, peruHospitals, 50);
+  const bestHospital = qaoaOptimize(userLat, userLon, nearby);
   const nearestHospital = nearby.length > 0 ? nearby[0] : null;
+  const travelTime = bestHospital ? estimateTravelTime(bestHospital.distance) : 0;
+  const googleMapsLink = bestHospital
+    ? `https://www.google.com/maps/dir/${userLat},${userLon}/${bestHospital.hospital.latitude},${bestHospital.hospital.longitude}`
+    : "#";
 
   const riskClass = risk === "Low" ? "risk-low" : risk === "Medium" ? "risk-medium" : "risk-high";
   const riskEmoji = risk === "Low" ? "✅" : risk === "Medium" ? "⚠️" : "🚨";
@@ -84,7 +91,7 @@ const Dashboard = () => {
             </div>
             <div className="mt-4 space-y-2 text-sm text-muted-foreground">
               <p>📊 Based on: Age ({profile.age}), BP ({profile.bloodPressure}), Weight ({profile.weight}kg)</p>
-              <p>🤖 Algorithm: K-Nearest Neighbors with {5} neighbors</p>
+              <p>🤖 Algorithm: K-Nearest Neighbors with 5 neighbors</p>
             </div>
           </motion.div>
 
@@ -102,6 +109,68 @@ const Dashboard = () => {
                 Size: ~{baby.size}
               </div>
             </div>
+          </motion.div>
+
+          {/* QAOA Optimized Route */}
+          <motion.div {...fadeIn(0.18)} className="card-medical lg:col-span-2">
+            <div className="flex items-center gap-2 mb-4">
+              <Zap className="h-5 w-5 text-primary" />
+              <h2 className="font-display text-xl font-bold text-foreground">QAOA Optimized Hospital Route</h2>
+            </div>
+            {bestHospital ? (
+              <div className="space-y-4">
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-xl bg-success/10 border border-success/20 p-4 text-center">
+                    <p className="text-xs text-muted-foreground mb-1">Best Hospital</p>
+                    <p className="font-bold text-foreground text-sm">⭐ {bestHospital.hospital.name}</p>
+                  </div>
+                  <div className="rounded-xl bg-info/10 border border-info/20 p-4 text-center">
+                    <p className="text-xs text-muted-foreground mb-1">Distance</p>
+                    <p className="font-bold text-foreground">{bestHospital.distance.toFixed(1)} km</p>
+                  </div>
+                  <div className="rounded-xl bg-warning/10 border border-warning/20 p-4 text-center">
+                    <p className="text-xs text-muted-foreground mb-1">Est. Travel Time</p>
+                    <p className="font-bold text-foreground">{travelTime} min</p>
+                  </div>
+                </div>
+
+                {/* Map preview */}
+                <div className="rounded-xl overflow-hidden border border-border">
+                  <iframe
+                    title="QAOA Route Map"
+                    width="100%"
+                    height="220"
+                    style={{ border: 0 }}
+                    src={`https://www.openstreetmap.org/export/embed.html?bbox=${userLon - 0.06}%2C${userLat - 0.04}%2C${userLon + 0.06}%2C${userLat + 0.04}&layer=mapnik&marker=${bestHospital.hospital.latitude}%2C${bestHospital.hospital.longitude}`}
+                  />
+                </div>
+
+                {/* Nearby hospitals list */}
+                <div className="space-y-1.5">
+                  {nearby.slice(0, 4).map((h) => (
+                    <div key={h.hospital.name} className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${h.hospital.name === bestHospital.hospital.name ? "bg-success/15 border border-success/30 font-semibold" : "bg-muted/40"}`}>
+                      <span className="text-foreground">
+                        {h.hospital.name === bestHospital.hospital.name ? "⭐ " : "🏥 "}
+                        {h.hospital.name}
+                      </span>
+                      <span className="text-muted-foreground">{h.distance.toFixed(1)} km • {estimateTravelTime(h.distance)} min</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <a href={googleMapsLink} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition">
+                    <Navigation className="h-4 w-4" /> Navigate in Google Maps
+                  </a>
+                  <div className="rounded-xl bg-muted px-4 py-2.5 text-xs text-muted-foreground flex items-center gap-1.5">
+                    <Zap className="h-3.5 w-3.5" /> QAOA Score: {bestHospital.score.toFixed(4)}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-center py-6">No hospitals found nearby</p>
+            )}
           </motion.div>
 
           {/* Nutrition */}
@@ -130,13 +199,6 @@ const Dashboard = () => {
                 Weeks remaining: ~{weeksRemaining} weeks
               </p>
             </div>
-            {nearestHospital && (
-              <div className="mt-4 rounded-lg border border-border p-3 text-sm">
-                <p className="font-semibold text-foreground">🏥 Nearest Hospital</p>
-                <p className="text-muted-foreground">{nearestHospital.hospital.name}</p>
-                <p className="text-muted-foreground">{nearestHospital.distance.toFixed(1)} km away</p>
-              </div>
-            )}
           </motion.div>
         </div>
 
