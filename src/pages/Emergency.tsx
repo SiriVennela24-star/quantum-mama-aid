@@ -1,9 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { loadProfile } from "@/lib/store";
 import { UserProfile } from "@/lib/types";
 import { peruHospitals } from "@/lib/hospitals";
@@ -13,32 +10,6 @@ import { Siren, MapPin, Clock, Navigation, CheckCircle, AlertTriangle, Loader2 }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-
-// Fix default marker icons
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-});
-
-const userIcon = new L.Icon({
-  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-});
-
-const hospitalIcon = new L.Icon({
-  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-});
-
-const bestIcon = new L.Icon({
-  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-});
 
 const Emergency = () => {
   const navigate = useNavigate();
@@ -168,29 +139,24 @@ const Emergency = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
               className="card-medical overflow-hidden p-0">
               <div className="h-[400px]">
-                <MapContainer center={[lat, lon]} zoom={12} style={{ height: "100%", width: "100%" }}>
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  <Marker position={[lat, lon]} icon={userIcon}>
-                    <Popup>📍 Your Location</Popup>
-                  </Marker>
-                  {nearby.map((h) => (
-                    <Marker key={h.hospital.name} position={[h.hospital.latitude, h.hospital.longitude]}
-                      icon={h.hospital.name === bestHospital.hospital.name ? bestIcon : hospitalIcon}>
-                      <Popup>
-                        🏥 {h.hospital.name}<br />
-                        {h.distance.toFixed(1)} km away
-                        {h.hospital.name === bestHospital.hospital.name && <><br /><strong>⭐ QAOA Optimal</strong></>}
-                      </Popup>
-                    </Marker>
-                  ))}
-                  <Polyline
-                    positions={[[lat, lon], [bestHospital.hospital.latitude, bestHospital.hospital.longitude]]}
-                    color="hsl(0, 80%, 50%)" weight={4} dashArray="10,10"
-                  />
-                </MapContainer>
+                <iframe
+                  title="Hospital Map"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.08}%2C${lat - 0.06}%2C${lon + 0.08}%2C${lat + 0.06}&layer=mapnik&marker=${lat}%2C${lon}`}
+                />
+              </div>
+              <div className="p-4 space-y-2">
+                {nearby.slice(0, 5).map((h) => (
+                  <div key={h.hospital.name} className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${h.hospital.name === bestHospital.hospital.name ? "bg-success/15 border border-success/30" : "bg-muted/50"}`}>
+                    <span className="font-medium text-foreground">
+                      {h.hospital.name === bestHospital.hospital.name ? "⭐ " : "🏥 "}
+                      {h.hospital.name}
+                    </span>
+                    <span className="text-muted-foreground">{h.distance.toFixed(1)} km</span>
+                  </div>
+                ))}
               </div>
             </motion.div>
 
