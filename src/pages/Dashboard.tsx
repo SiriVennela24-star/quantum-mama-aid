@@ -7,6 +7,7 @@ import { predictRisk, getNutritionRecommendations, getBabyDevelopment, predictDe
 import { peruHospitals } from "@/lib/hospitals";
 import { findNearbyHospitals } from "@/lib/qaoa";
 import { Heart, Baby, Activity, AlertTriangle, Apple, Clock, MapPin, Phone, Siren } from "lucide-react";
+import QuantumMomHeader from "@/components/QuantumMomHeader";
 
 const Dashboard = () => {
   const navigate = useNavigate();
