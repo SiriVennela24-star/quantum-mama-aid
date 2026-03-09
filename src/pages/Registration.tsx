@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Heart, Baby, Utensils, Phone, Plus, Trash2 } from "lucide-react";
+import QuantumMomHeader from "@/components/QuantumMomHeader";
 
 const Registration = () => {
   const navigate = useNavigate();
