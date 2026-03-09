@@ -42,17 +42,11 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="gradient-hero px-6 py-8">
-        <div className="mx-auto max-w-5xl flex items-center justify-between">
-          <div>
-            <h1 className="font-display text-3xl font-extrabold text-primary-foreground">🤰 QuantumMom</h1>
-            <p className="text-primary-foreground/80">Welcome, {profile.name || "Mom"} 💕</p>
-          </div>
-          <button onClick={() => navigate("/")} className="rounded-lg bg-primary-foreground/20 px-4 py-2 text-sm text-primary-foreground hover:bg-primary-foreground/30 transition">
-            Edit Profile
-          </button>
-        </div>
+      <div className="relative">
+        <QuantumMomHeader compact subtitle={`Welcome, ${profile.name || "Mom"} 💕`} />
+        <button onClick={() => navigate("/")} className="absolute top-6 right-6 z-20 rounded-lg bg-primary-foreground/20 px-4 py-2 text-sm text-primary-foreground hover:bg-primary-foreground/30 transition">
+          Edit Profile
+        </button>
       </div>
 
       <div className="mx-auto max-w-5xl px-6 py-8 space-y-6">
